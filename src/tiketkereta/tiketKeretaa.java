@@ -1,0 +1,499 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package tiketkereta;
+
+import java.awt.event.ActionEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+/**
+ *
+ * @author Adam
+ */
+public class tiketKeretaa extends javax.swing.JFrame {
+private DefaultTableModel dftTabel;
+    private String SQL;
+//  fungsi untuk mengambil data dari table transaksi untuk ditampilkan di tabel transaksi
+    public final void TampilData() {
+//      mendefinisikan daftar column yang ada di design 
+        dftTabel = new DefaultTableModel();
+        dftTabel.addColumn("No");
+        dftTabel.addColumn("nama");
+        dftTabel.addColumn("kode kereta");
+        dftTabel.addColumn("nama kereta");
+        dftTabel.addColumn("jurusan");
+        dftTabel.addColumn("jenis tiket");
+        dftTabel.addColumn("harga");
+        dftTabel.addColumn("jumlah");
+        dftTabel.addColumn("total bayar");
+        tabel_tiket.setModel(dftTabel);
+        Connection conn = TiketKereta.getKoneksi();
+        try {
+//          mendapatkan koneksi database ke table transaksi
+            java.sql.Statement stmt = conn.createStatement();
+//          membuat queri untuk menampilkan seluruh data yang ada di table transaksi
+            SQL = "select * from transaksi";
+            java.sql.ResultSet res = stmt.executeQuery(SQL);
+            while (res.next()) {
+//              mendefinisikan daftar column di table transaksi untuk direlasikan ke daftar column di design
+                dftTabel.addRow(new Object[]{
+                    res.getString("id"),
+                    res.getString("nama"),
+                    res.getString("kode_kereta"),
+                    res.getString("nama_kereta"),
+                    res.getString("jurusan"),
+                    res.getString("jenis_tiket"),
+                    res.getString("harga"),
+                    res.getString("jumlah"),
+                    res.getString("total_bayar")
+                });
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        
+    }
+    public void tampil_combo1() {
+        try{
+//          membuat queri untuk mengambil data di table barang  
+            String sql = "select * from tiket";
+            java.sql.Connection konn = (Connection) TiketKereta.getKoneksi();
+            java.sql.PreparedStatement pst = konn.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+//          membuat perulangan untuk mengambil data dari table barang dan ditampung di variable.
+            while(rs.next()){
+                String kereta = rs.getString("kd_kereta");
+                String nm_kereta = rs.getString("nama_kereta");
+                String jurusan = rs.getString("jurusan");
+                KodeKereta.addItem(kereta);
+//              kondisi apabila kode barang yang dipilih sesuai maka nama barang dengan harganya menyesuaikan dengan kode barang yang dipilih. 
+                if (kereta.equals(KodeKereta.getSelectedItem())){
+                    NamaKereta.setText(nm_kereta);
+                    jurusann.addItem(jurusan);
+                }
+            }
+//          membuat fungsi jika combobox kode barang di klik.
+            KodeKereta.addActionListener((ActionEvent e) -> {
+                String selectId = (String) KodeKereta.getSelectedItem();
+//               membuat queri untuk mengambil data dari table barang dengan klausa where 
+                 String query = "SELECT * FROM tiket WHERE kd_kereta = '" + selectId + "'";
+                try {
+                    java.sql.Statement stmt2 = konn.createStatement();
+                    java.sql.ResultSet res2 = stmt2.executeQuery(query);
+                    if (res2.next()) {
+                        String nama = res2.getString("nama_kereta");
+                        String jurusan = res2.getString("jurusan");
+                        // atur text jNamabarang dan jHargaBarang
+                        NamaKereta.setText(nama);
+                        jurusann.addItem(jurusan);
+                    }
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            });
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Creates new form tiketKeretaa
+     */
+    public tiketKeretaa() {
+        initComponents();
+        this.TampilData();
+        this.tampil_combo1();
+//        this.tampil_combo2();
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        ttlbayar = new javax.swing.JTextField();
+        jurusann = new javax.swing.JComboBox<>();
+        Nama = new javax.swing.JTextField();
+        KodeKereta = new javax.swing.JComboBox<>();
+        express = new javax.swing.JRadioButton();
+        ekonomi = new javax.swing.JRadioButton();
+        bisnis = new javax.swing.JRadioButton();
+        eksklusif = new javax.swing.JRadioButton();
+        NamaKereta = new javax.swing.JTextField();
+        hargaa = new javax.swing.JTextField();
+        jmlbeli = new javax.swing.JTextField();
+        keluar = new javax.swing.JButton();
+        belilagi = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabel_tiket = new javax.swing.JTable();
+        beli = new javax.swing.JButton();
+        hapus = new javax.swing.JButton();
+        jenis_tiket = new javax.swing.JTextField();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
+
+        jLabel1.setText("AGEN PENJUALAN TIKET");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(270, 50, 190, 40);
+
+        jLabel2.setText("total bayar : ");
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(40, 400, 80, 16);
+
+        jLabel3.setText("nama : ");
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(40, 130, 80, 16);
+
+        jLabel4.setText("kode kereta : ");
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(40, 160, 80, 16);
+
+        jLabel5.setText("nama kereta : ");
+        getContentPane().add(jLabel5);
+        jLabel5.setBounds(40, 190, 80, 16);
+
+        jLabel6.setText("jurusan : ");
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(40, 220, 80, 16);
+
+        jLabel7.setText("jenis tiket : ");
+        getContentPane().add(jLabel7);
+        jLabel7.setBounds(40, 250, 80, 16);
+
+        jLabel8.setText("harga : ");
+        getContentPane().add(jLabel8);
+        jLabel8.setBounds(40, 320, 80, 16);
+
+        jLabel9.setText("jumlah beli : ");
+        getContentPane().add(jLabel9);
+        jLabel9.setBounds(40, 370, 80, 16);
+        getContentPane().add(ttlbayar);
+        ttlbayar.setBounds(340, 400, 180, 30);
+
+        jurusann.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jurusannActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jurusann);
+        jurusann.setBounds(340, 230, 180, 30);
+
+        Nama.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NamaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(Nama);
+        Nama.setBounds(340, 110, 180, 30);
+
+        KodeKereta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                KodeKeretaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(KodeKereta);
+        KodeKereta.setBounds(340, 152, 180, 30);
+
+        express.setText("Express");
+        getContentPane().add(express);
+        express.setBounds(430, 290, 98, 21);
+
+        ekonomi.setText("Ekonomi");
+        ekonomi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ekonomiActionPerformed(evt);
+            }
+        });
+        getContentPane().add(ekonomi);
+        ekonomi.setBounds(340, 260, 70, 21);
+
+        bisnis.setText("Bisnis");
+        getContentPane().add(bisnis);
+        bisnis.setBounds(340, 290, 98, 21);
+
+        eksklusif.setText("Ekslusif");
+        getContentPane().add(eksklusif);
+        eksklusif.setBounds(430, 260, 98, 21);
+        getContentPane().add(NamaKereta);
+        NamaKereta.setBounds(340, 190, 180, 30);
+
+        hargaa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hargaaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(hargaa);
+        hargaa.setBounds(340, 320, 180, 30);
+        getContentPane().add(jmlbeli);
+        jmlbeli.setBounds(340, 360, 180, 30);
+
+        keluar.setText("Keluar");
+        keluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                keluarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(keluar);
+        keluar.setBounds(390, 600, 75, 23);
+
+        belilagi.setText("Beli Lagi");
+        belilagi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                belilagiActionPerformed(evt);
+            }
+        });
+        getContentPane().add(belilagi);
+        belilagi.setBounds(170, 600, 90, 23);
+
+        tabel_tiket.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tabel_tiket.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabel_tiketMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabel_tiket);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(32, 482, 590, 110);
+
+        beli.setText("Beli");
+        beli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                beliActionPerformed(evt);
+            }
+        });
+        getContentPane().add(beli);
+        beli.setBounds(180, 440, 72, 23);
+
+        hapus.setText("Hapus");
+        hapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hapusActionPerformed(evt);
+            }
+        });
+        getContentPane().add(hapus);
+        hapus.setBounds(390, 440, 75, 23);
+        getContentPane().add(jenis_tiket);
+        jenis_tiket.setBounds(10, 10, 10, 0);
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jurusannActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jurusannActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jurusannActionPerformed
+
+    private void ekonomiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ekonomiActionPerformed
+        // TODO add your handling code here:
+        int harga = Integer.parseInt(hargaa.getText());
+        int ekonomi = 20000;
+        int total = harga + ekonomi;
+        ttlbayar.setText(String.valueOf(total));
+        jenis_tiket.setText("ekonomi");
+    }//GEN-LAST:event_ekonomiActionPerformed
+
+    private void beliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_beliActionPerformed
+        // TODO add your handling code here:
+        try{
+            Connection konn = TiketKereta.getKoneksi();
+            PreparedStatement stmt = konn.prepareStatement("insert into transaksi( nama, kode_kereta,nama_kereta, jurusan, jenis_tiket, harga, jumlah, total_bayar) values (?,?,?,?,?,?,?,?)");
+            stmt.setString(1, Nama.getText());
+            stmt.setString(2, (String)KodeKereta.getSelectedItem());
+            stmt.setString(3, NamaKereta.getText());
+            stmt.setString(4, (String)jurusann.getSelectedItem());
+            String jenis = "";
+            if (bisnis.isSelected()) {
+            jenis = "bisnis";
+            }
+            else if (ekonomi.isSelected()) {
+            jenis = "ekonomi";
+            } 
+            else if (express.isSelected()) {
+            jenis = "express";
+            } 
+            else if (eksklusif.isSelected()) {
+            jenis = "esklusif";
+            }
+            stmt.setString(5, jenis);
+            stmt.setString(6, hargaa.getText());
+            stmt.setString(7, jmlbeli.getText());
+            stmt.setString(8, ttlbayar.getText());
+            stmt.executeUpdate();
+            JOptionPane.showMessageDialog(null,"data berhasil disimpan!", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+            TampilData();
+        }catch (SQLException e) {
+            System.out.println("e.getMessage");
+        }
+    }//GEN-LAST:event_beliActionPerformed
+
+    private void hargaaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hargaaActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_hargaaActionPerformed
+    
+    private String selectedIdTransaksi;
+    private void tabel_tiketMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabel_tiketMouseClicked
+        // TODO add your handling code here:
+        int baris = tabel_tiket.getSelectedRow();
+        selectedIdTransaksi = dftTabel.getValueAt(baris, 0).toString();
+        Nama.setText(dftTabel.getValueAt(baris,1).toString());
+        KodeKereta.addItem(dftTabel.getValueAt(baris,2).toString());
+        NamaKereta.setText(dftTabel.getValueAt(baris,3).toString());
+        jurusann.addItem(dftTabel.getValueAt(baris,4).toString());
+        jenis_tiket.setText(dftTabel.getValueAt(baris,5).toString());
+        hargaa.setText(dftTabel.getValueAt(baris,6).toString());
+        jmlbeli.setText(dftTabel.getValueAt(baris,7).toString());
+        ttlbayar.setText(dftTabel.getValueAt(baris,8).toString());
+    }//GEN-LAST:event_tabel_tiketMouseClicked
+
+    private void belilagiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_belilagiActionPerformed
+        // TODO add your handling code here:
+        try {
+//          mendapatkan koneksi ke database
+            Connection conn = TiketKereta.getKoneksi();
+//          membuat queri update ke table transaksi
+            PreparedStatement stmt = conn.prepareStatement("update transaksi set jumlah=?, total_bayar=? where id=?");
+            stmt.setString(1, jmlbeli.getText());
+            stmt.setString(2, ttlbayar.getText());
+            stmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Data berhasil diubah", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+            TampilData();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_belilagiActionPerformed
+
+    private void KodeKeretaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_KodeKeretaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_KodeKeretaActionPerformed
+
+    private void NamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NamaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NamaActionPerformed
+
+    
+    private void keluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_keluarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_keluarActionPerformed
+
+    private void hapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapusActionPerformed
+        // TODO add your handling code here:
+        Connection conn = TiketKereta.getKoneksi();
+//      popup confirm 
+        int confirm = JOptionPane.showConfirmDialog(null, "Yakin pengen dihapus datanya??", "Konfirmasi", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (confirm == 0) {
+            try {
+//              mendapatkan koneksi database ke table barang
+                java.sql.PreparedStatement stmt = conn.prepareStatement("delete from transaksi where id ='" + selectedIdTransaksi + "'");
+                stmt.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Data berhasil dihapus", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+                TampilData();
+                Nama.setText("");
+                KodeKereta.addItem("");
+                NamaKereta.setText("");
+                jurusann.addItem("");
+                jenis_tiket.setText("");
+                hargaa.setText("");
+                jmlbeli.setText("");
+                KodeKereta.requestFocus();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Data gagal di hapus" + e.getMessage(), "Pesan", JOptionPane.ERROR_MESSAGE);
+            }
+        }    
+    }//GEN-LAST:event_hapusActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(tiketKeretaa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(tiketKeretaa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(tiketKeretaa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(tiketKeretaa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new tiketKeretaa().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> KodeKereta;
+    private javax.swing.JTextField Nama;
+    private javax.swing.JTextField NamaKereta;
+    private javax.swing.JButton beli;
+    private javax.swing.JButton belilagi;
+    private javax.swing.JRadioButton bisnis;
+    private javax.swing.JRadioButton ekonomi;
+    private javax.swing.JRadioButton eksklusif;
+    private javax.swing.JRadioButton express;
+    private javax.swing.JButton hapus;
+    private javax.swing.JTextField hargaa;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jenis_tiket;
+    private javax.swing.JTextField jmlbeli;
+    private javax.swing.JComboBox<String> jurusann;
+    private javax.swing.JButton keluar;
+    private javax.swing.JTable tabel_tiket;
+    private javax.swing.JTextField ttlbayar;
+    // End of variables declaration//GEN-END:variables
+}
